@@ -1,0 +1,322 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   FarmShares Design System — Tailwind CSS v4
+   Semantic tokens defined as runtime CSS variables so they flip
+   automatically in dark mode (.dark on <html>).
+   ------------------------------------------------------------------ */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Nunito", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale  → text-* utilities */
+  --text-headline-xl: 2.25rem;
+  --text-headline-xl--line-height: 2.75rem;
+  --text-headline-lg: 1.875rem;
+  --text-headline-lg--line-height: 2.25rem;
+  --text-headline-md: 1.5rem;
+  --text-headline-md--line-height: 2rem;
+  --text-headline-sm: 1.25rem;
+  --text-headline-sm--line-height: 1.75rem;
+  --text-title-md: 1.125rem;
+  --text-title-md--line-height: 1.5rem;
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.625rem;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.375rem;
+  --text-label-md: 0.875rem;
+  --text-label-md--line-height: 1.25rem;
+  --text-label-lg: 1rem;
+  --text-label-lg--line-height: 1.5rem;
+  --text-label-sm: 0.75rem;
+  --text-label-sm--line-height: 1rem;
+
+  /* Weights → font-* utilities */
+  --font-weight-headline-xl: 800;
+  --font-weight-headline-lg: 800;
+  --font-weight-headline-md: 700;
+  --font-weight-headline-sm: 700;
+  --font-weight-title-md: 700;
+  --font-weight-body-md: 400;
+  --font-weight-body-sm: 400;
+  --font-weight-label-md: 600;
+  --font-weight-label-lg: 600;
+  --font-weight-label-sm: 600;
+
+  /* Spacing scale → gap-space-24, p-space-16 … */
+  --spacing-space-4: 0.25rem;
+  --spacing-space-8: 0.5rem;
+  --spacing-space-12: 0.75rem;
+  --spacing-space-16: 1rem;
+  --spacing-space-24: 1.5rem;
+  --spacing-space-32: 2rem;
+
+  /* Layout */
+  --container-max-width: 90rem; /* 1440px → max-w-max-width */
+
+  /* Radii */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+}
+
+/*
+  Semantic color tokens. `inline` makes generated utilities emit
+  var() references so a single .dark class re-skins the whole app.
+*/
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+
+  --color-error: var(--error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --color-success: var(--success);
+  --color-success-container: var(--success-container);
+  --color-on-success-container: var(--on-success-container);
+  --color-warning: var(--warning);
+
+  --color-nm-dark: var(--nm-dark);
+  --color-nm-light: var(--nm-light);
+}
+
+/* ----------------------------- Light palette ----------------------------- */
+:root {
+  --background: #e8ecdf;
+  --surface: #eef2e5;
+  --surface-raised: #f5f8ee;
+  --on-surface: #1d291b;
+  --on-surface-variant: #57644f;
+
+  --primary: #3d7d46;
+  --on-primary: #f7fbf4;
+  --primary-container: #c7e5c4;
+  --on-primary-container: #0e3a15;
+
+  --secondary: #6a8a4f;
+  --on-secondary: #f7fbf4;
+  --secondary-container: #dfe9c9;
+  --on-secondary-container: #1f3312;
+
+  --tertiary: #c2821f;
+  --on-tertiary: #fffaf1;
+  --tertiary-container: #f6e2ba;
+  --on-tertiary-container: #482d05;
+
+  --outline: #97a68c;
+  --outline-variant: #cdd7bf;
+
+  --error: #b3402e;
+  --error-container: #f8d9d0;
+  --on-error-container: #4a1109;
+  --success: #2f7d4f;
+  --success-container: #cfe9d7;
+  --on-success-container: #0c3820;
+  --warning: #b07a17;
+
+  /* Neumorphic shadow palette */
+  --nm-dark: #c3ccb2;
+  --nm-light: #ffffff;
+}
+
+/* ----------------------------- Dark palette ------------------------------ */
+.dark {
+  --background: #131710;
+  --surface: #1a2016;
+  --surface-raised: #232b1f;
+  --on-surface: #e2ebdc;
+  --on-surface-variant: #a3b294;
+
+  --primary: #7fc98a;
+  --on-primary: #0d2a12;
+  --primary-container: #2b5232;
+  --on-primary-container: #c7e5c4;
+
+  --secondary: #a2c07c;
+  --on-secondary: #1c2a0e;
+  --secondary-container: #3a4a24;
+  --on-secondary-container: #dfe9c9;
+
+  --tertiary: #e3ab52;
+  --on-tertiary: #2e1e05;
+  --tertiary-container: #4a3511;
+  --on-tertiary-container: #f6e2ba;
+
+  --outline: #5a6a50;
+  --outline-variant: #35402c;
+
+  --error: #e6907f;
+  --error-container: #5c2418;
+  --on-error-container: #f8d9d0;
+  --success: #7cc9a0;
+  --success-container: #1e4630;
+  --on-success-container: #cfe9d7;
+  --warning: #e0b25a;
+
+  --nm-dark: #0b0f09;
+  --nm-light: #2a3323;
+}
+
+/* ------------------------------ Base layer ------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--on-surface);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition:
+      background-color 250ms ease,
+      color 250ms ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--primary) 30%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  input::placeholder {
+    color: var(--outline);
+  }
+}
+
+/* --------------------------- Neumorphic utilities ------------------------ */
+@utility neu-outset {
+  background-color: var(--surface);
+  box-shadow: 6px 6px 14px var(--nm-dark), -6px -6px 14px var(--nm-light);
+}
+
+@utility neu-outset-sm {
+  background-color: var(--surface);
+  box-shadow: 3px 3px 7px var(--nm-dark), -3px -3px 7px var(--nm-light);
+}
+
+@utility neu-inset {
+  background-color: var(--surface);
+  box-shadow: inset 4px 4px 9px var(--nm-dark), inset -4px -4px 9px var(--nm-light);
+}
+
+@utility neu-inset-sm {
+  background-color: var(--surface);
+  box-shadow: inset 2px 2px 5px var(--nm-dark), inset -2px -2px 5px var(--nm-light);
+}
+
+/* Pressable soft button (pairs with neu-outset) */
+@utility neu-btn {
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease,
+    color 150ms ease;
+
+  &:hover {
+    box-shadow: 4px 4px 10px var(--nm-dark), -4px -4px 10px var(--nm-light);
+  }
+
+  &:active {
+    box-shadow: inset 3px 3px 7px var(--nm-dark), inset -3px -3px 7px var(--nm-light);
+    transform: translateY(1px);
+  }
+}
+
+/* Input well (inset that glows on focus) */
+@utility neu-well {
+  background-color: var(--surface);
+  box-shadow: inset 4px 4px 9px var(--nm-dark), inset -4px -4px 9px var(--nm-light);
+  transition: box-shadow 150ms ease;
+
+  &:focus-within {
+    box-shadow:
+      inset 4px 4px 9px var(--nm-dark),
+      inset -4px -4px 9px var(--nm-light),
+      0 0 0 2px color-mix(in srgb, var(--primary) 55%, transparent);
+  }
+}
+
+/* Solid primary action */
+@utility neu-cta {
+  background-image: linear-gradient(
+    135deg,
+    var(--primary),
+    color-mix(in srgb, var(--primary) 70%, var(--secondary))
+  );
+  color: var(--on-primary);
+  box-shadow:
+    4px 4px 12px color-mix(in srgb, var(--primary) 45%, var(--nm-dark)),
+    -4px -4px 12px var(--nm-light);
+  transition:
+    box-shadow 150ms ease,
+    transform 150ms ease,
+    filter 150ms ease;
+
+  &:hover {
+    filter: brightness(1.06);
+  }
+
+  &:active {
+    box-shadow: inset 3px 3px 8px color-mix(in srgb, var(--primary) 55%, black);
+    transform: translateY(1px);
+  }
+}
+
+/* Slim custom scrollbar */
+@utility neu-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--outline);
+    border-radius: 9999px;
+  }
+}
+
