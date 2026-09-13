@@ -9,13 +9,15 @@
  */
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowRight, BadgeCheck, Lock, Mail, Sprout, User } from 'lucide-react'
 import { FormAlert } from '../../../components/auth/FormAlert'
 import { PasswordField } from '../../../components/auth/PasswordField'
 import { RoleSelector } from '../../../components/auth/RoleSelector'
 import { TextField } from '../../../components/auth/TextField'
 import { useApp } from '../../../context/AppContext'
-import { APP_SIGNUP_TAGLINE } from '../../../config/app'
+import { APP_SIGNUP_TAGLINE, ROUTES } from '../../../config/app'
+import { useTransientMessage } from '../../../hooks/useTransientMessage'
 import { fetchOwnProfile, signUpUser } from '../../../lib/auth'
 import { validateSignUpFields } from '../../../lib/validation'
 
@@ -39,8 +41,9 @@ export function SignUpForm() {
   const { navigate, role, setProfile } = useApp()
   const [form, setForm] = useState<SignUpFormState>(INITIAL_FORM)
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
-  const [notice, setNotice] = useState('')
+  // Error & success alerts vanish on their own — see hooks/useTransientMessage.
+  const [error, showError, clearError] = useTransientMessage()
+  const [notice, showNotice] = useTransientMessage()
 
   /** Generic field updater so inputs stay one-liners. */
   const update = <K extends keyof SignUpFormState>(key: K, value: SignUpFormState[K]) => {
@@ -51,14 +54,14 @@ export function SignUpForm() {
     event.preventDefault()
     const invalid = validateSignUpFields(form)
     if (invalid) {
-      setError(invalid)
+      showError(invalid)
       return
     }
     if (!form.terms) {
-      setError('Please accept the Terms of Service & Privacy Policy.')
+      showError('Please accept the Terms of Service & Privacy Policy.')
       return
     }
-    setError('')
+    clearError()
     setBusy(true)
     try {
       // user_metadata is consumed by the DB trigger that inserts public.profiles.
@@ -69,13 +72,13 @@ export function SignUpForm() {
         role,
       })
       if (needsEmailConfirmation) {
-        setNotice('Account created. Check your inbox to confirm your email, then sign in.')
+        showNotice('Account created. Check your inbox to confirm your email, then sign in.')
       } else {
         setProfile(await fetchOwnProfile())
         navigate('dashboard')
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to create account. Try again.')
+      showError(err instanceof Error ? err.message : 'Unable to create account. Try again.')
     } finally {
       setBusy(false)
     }
@@ -166,21 +169,23 @@ export function SignUpForm() {
             </div>
             <span className="text-body-sm font-body-sm leading-tight text-on-surface-variant">
               I agree to the FarmShares{' '}
-              <a
+              <Link
                 className="font-semibold text-primary underline hover:text-secondary"
-                href="#terms"
-                onClick={(event) => event.preventDefault()}
+                rel="noreferrer"
+                target="_blank"
+                to={ROUTES.termsOfService}
               >
                 Terms of Service
-              </a>{' '}
+              </Link>{' '}
               &amp;{' '}
-              <a
+              <Link
                 className="font-semibold text-primary underline hover:text-secondary"
-                href="#privacy"
-                onClick={(event) => event.preventDefault()}
+                rel="noreferrer"
+                target="_blank"
+                to={ROUTES.privacyPolicy}
               >
                 Privacy Policy
-              </a>
+              </Link>
             </span>
           </label>
         </div>

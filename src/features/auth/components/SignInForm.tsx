@@ -16,6 +16,7 @@ import { TextField } from '../../../components/auth/TextField'
 import { FormAlert } from '../../../components/auth/FormAlert'
 import { useApp } from '../../../context/AppContext'
 import { APP_NAME, APP_SIGNIN_TAGLINE } from '../../../config/app'
+import { useTransientMessage } from '../../../hooks/useTransientMessage'
 import { signInUser } from '../../../lib/auth'
 import { validateLoginFields } from '../../../lib/validation'
 
@@ -24,16 +25,17 @@ export function SignInForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
+  // Error alerts vanish on their own — see hooks/useTransientMessage.
+  const [error, showError, clearError] = useTransientMessage()
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const invalid = validateLoginFields(email, password)
     if (invalid) {
-      setError(invalid)
+      showError(invalid)
       return
     }
-    setError('')
+    clearError()
     setBusy(true)
     try {
       // Authorization comes from the trusted profiles row, never the UI pick.
@@ -42,7 +44,7 @@ export function SignInForm() {
       setRole(profile.role)
       navigate('dashboard')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to sign in. Try again.')
+      showError(err instanceof Error ? err.message : 'Unable to sign in. Try again.')
     } finally {
       setBusy(false)
     }

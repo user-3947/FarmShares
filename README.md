@@ -5,7 +5,7 @@
 **The cooperative farm & share ledger — fractional agri-asset ownership,
 lease tracking and yield telemetry in one soft-UI portal.**
 
-[![Version](https://img.shields.io/badge/version-1.2.1-3d7d46?style=for-the-badge&labelColor=2a3323)](#-versioning)
+[![Version](https://img.shields.io/badge/version-1.3.0-3d7d46?style=for-the-badge&labelColor=2a3323)](#-versioning)
 [![React](https://img.shields.io/badge/React-19-149eca?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-8-aa6bff?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev)
@@ -32,6 +32,7 @@ seasonal yield — all behind one Supabase-secured sign-in with a neumorphic
 | | Feature | Details |
 |---|---|---|
 | 🔐 | **Supabase Auth** | Email + password sign-in & sign-up, session restore on reload, clear errors for unconfirmed emails and role mismatches. |
+| 🧭 | **Real routes** | True browser URLs — `/login`, `/create`, `/dashboard` and legal pages — with a protected dashboard and a catch-all redirect to sign-in. |
 | 🛡️ | **Trusted roles** | Authorization comes from the signed-in user's own `public.profiles.role` row (RLS-backed). The UI role pick is verified, never trusted. |
 | 📊 | **Investor deck** | KPI tiles (capital, portfolio value, parcels, dividends) + a Recharts capital-vs-dividends ledger with 1M / 6M / 1Y horizons and one-click CSV export. |
 | 🚜 | **Landowner deck** | Acreage, seasonal yield, active leases and payout stats. |
@@ -41,6 +42,8 @@ seasonal yield — all behind one Supabase-secured sign-in with a neumorphic
 | ⚡ | **Code splitting** | The dashboard is lazy-loaded into its own chunk — auth screens stay featherweight. |
 | 📱 | **Responsive shell** | Fixed top bar + section sidebar collapse gracefully on small screens. |
 | 🧱 | **Design system** | Tailwind v4 semantic tokens & custom `neu-*` neumorphic utilities defined once in `src/index.css`. |
+| 📄 | **Legal pages** | Placeholder Terms of Service & Privacy Policy in the shared soft-UI frame, linked from the auth footer and the sign-up checkbox. |
+| ⏱️ | **Transient alerts** | Form error and success notices auto-dismiss after 5 seconds. |
 
 ---
 
@@ -54,6 +57,7 @@ seasonal yield — all behind one Supabase-secured sign-in with a neumorphic
 | Styling | [Tailwind CSS v4](https://tailwindcss.com) — `@theme` tokens & `@utility` neumorphs |
 | Icons | [lucide-react](https://lucide.dev) |
 | Charts | [Recharts 3](https://recharts.org) |
+| Routing | [React Router 7](https://reactrouter.com) — real browser URLs for every screen |
 | Backend | [Supabase](https://supabase.com) — Auth, Postgres, Row-Level Security |
 | Quality gates | `tsc -b` strict build · oxlint |
 
@@ -62,12 +66,13 @@ seasonal yield — all behind one Supabase-secured sign-in with a neumorphic
 ```
 src/
 ├── components/            # Reusable cross-feature UI
-│   ├── auth/              #   AuthShell · RoleSelector · PasswordField · TextField · FormAlert
+│   ├── auth/              #   AuthShell · RoleSelector · PasswordField · TextField ·
+│   │                      #   FormAlert · LegalDoc
 │   └── ui/                #   BrandLogo · ThemeToggle · LiveStatusBadge
 ├── config/
-│   └── app.ts             # App identity: version, taglines, status & legal strings
+│   └── app.ts             # App identity: version, taglines, routes, status & legal strings
 ├── context/
-│   └── AppContext.tsx     # Global state: theme · view · role · trusted profile
+│   └── AppContext.tsx     # Global state: theme · role · trusted profile (URLs live in App.tsx)
 ├── features/
 │   ├── auth/
 │   │   └── components/    #   SignInForm · SignUpForm
@@ -76,6 +81,8 @@ src/
 │       ├── dashboard.data.ts    # Mocked domain data + derived helpers (CSV, palettes)
 │       └── components/          # Header · Sidebar · Hero · LedgerChart ·
 │                                # StatCard · InvestmentCard · HoldingsPanel · NotificationsMenu
+├── hooks/
+│   └── useTransientMessage.ts   # Auto-dismissing error/success alert state (5 s)
 ├── lib/
 │   ├── supabase.ts        # Env-configured Supabase client
 │   ├── auth.ts            # sign-up / sign-in / own-profile (trusted role source)
@@ -84,9 +91,11 @@ src/
 ├── pages/                 # Slim composition roots
 │   ├── LoginPage.tsx
 │   ├── CreateAccount.tsx
-│   └── Dashboard.tsx
+│   ├── Dashboard.tsx
+│   ├── TermsOfService.tsx
+│   └── PrivacyPolicy.tsx
 ├── index.css              # Soft-UI design system (tokens, dark mode, neu-* utilities)
-├── App.tsx                # Providers · session bootstrap · lazy dashboard
+├── App.tsx                # Router · providers · session bootstrap · protected lazy dashboard
 └── main.tsx
 ```
 
@@ -99,8 +108,9 @@ src/
 cd Frontend
 npm install
 
-# 2 · configure Supabase credentials
-cp .env.example .env    # then fill in the two variables below
+# 2 · configure Supabase credentials — create Frontend/.env containing:
+#     VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+#     VITE_SUPABASE_ANON_KEY=your-anon-public-key
 
 # 3 · run
 npm run dev             # start the dev server
@@ -119,7 +129,17 @@ npm run dev             # start the dev server
 | `npm run lint` | oxlint over `src/` |
 
 > 💡 Without real credentials the app still builds and renders, but auth
-> actions fail fast with a pointer to `.env.example`.
+> actions fail fast with guidance to set the two variables.
+
+## 🧭 Routes
+
+| Path | Screen |
+|---|---|
+| `/login` | Sign-in — also the catch-all for unknown URLs |
+| `/create` | Create account (alias `/create-account`) |
+| `/dashboard` | Authenticated portal — redirects to `/login` without a trusted profile |
+| `/terms-of-service` | Terms of Service (placeholder legal page) |
+| `/privacy-policy` | Privacy Policy (placeholder legal page) |
 
 ## ☁️ Deployment
 
@@ -160,7 +180,7 @@ npm run dev             # start the dev server
 The version is single-sourced in [`package.json`](package.json) and
 [`src/config/app.ts`](src/config/app.ts) (`APP_VERSION`) and rendered in every
 page footer. Release history — what each **Major.Minor.Patch** delivered — is
-documented concisely in [`devLog.md`](devLog.md). Current release: **1.2.1**.
+documented concisely in [`devLog.md`](devLog.md). Current release: **1.3.0**.
 
 ---
 

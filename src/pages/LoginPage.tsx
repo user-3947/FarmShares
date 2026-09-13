@@ -2,11 +2,12 @@
  * ============================================================================
  *  Login Page
  * ----------------------------------------------------------------------------
- *  Unauthenticated entry point. The frame (header/footer) comes from
+ *  Unauthenticated entry point (/login). The frame (header/footer) comes from
  *  AuthShell; the card is the feature-level SignInForm. Credentials are never
  *  displayed anywhere in the UI.
  * ============================================================================
  */
+import { Link } from 'react-router-dom'
 import { AuthShell } from '../components/auth/AuthShell'
 import {
   APP_NAME,
@@ -31,14 +32,9 @@ export default function LoginPage() {
           </span>
           <div className="flex gap-4 text-label-sm font-label-sm">
             {AUTH_FOOTER_LINKS.map((link) => (
-              <a
-                key={link}
-                className="transition-colors hover:text-primary"
-                href={`#${link.toLowerCase().replace(/\s+/g, '-')}`}
-                onClick={(event) => event.preventDefault()}
-              >
-                {link}
-              </a>
+              <Link className="transition-colors hover:text-primary" key={link.path} to={link.path}>
+                {link.label}
+              </Link>
             ))}
           </div>
           <span className="text-[0.625rem] font-normal tracking-widest uppercase opacity-70">

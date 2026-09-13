@@ -2,9 +2,10 @@
  * ============================================================================
  *  App Context
  * ----------------------------------------------------------------------------
- *  Global UI state: theme, current view, login role and the trusted profile
- *  row. APP_VERSION lives in config/app.ts — this module stays state + typing
- *  only.
+ *  Global UI state: theme, login role and the trusted profile row. Routing is
+ *  owned by react-router — `navigate` maps a View name onto its real URL (see
+ *  App.tsx). APP_VERSION lives in config/app.ts — this module stays state +
+ *  typing only.
  * ============================================================================
  */
 import { createContext, useContext } from 'react'
@@ -26,7 +27,7 @@ export interface Profile {
 export interface AppContextValue {
   theme: Theme
   toggleTheme: () => void
-  view: View
+  /** Navigates to the given screen through its real URL (react-router). */
   navigate: (view: View) => void
   role: Role
   setRole: (role: Role) => void

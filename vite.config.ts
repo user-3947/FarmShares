@@ -35,7 +35,7 @@ function supabaseEnvGuard(): Plugin {
           ...missing.map((name) => `   · ${name}`),
           unprefixed.length > 0
             ? `   ↳ Found unprefixed ${unprefixed.join(', ')} — rename them with the VITE_ prefix.`
-            : '   ↳ Local dev: set them in Frontend/.env (see .env.example).',
+            : '   ↳ Local dev: create Frontend/.env with the two VITE_SUPABASE_* keys.',
           '   ↳ Host/CI: add them to the platform build environment variables, then rebuild.',
           '   The app builds, but auth fails at runtime with "Supabase is not configured".',
         ].join('\n'),
