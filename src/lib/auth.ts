@@ -4,7 +4,7 @@ import type { Profile, Role } from '../context/AppContext'
 const guard = () => {
   if (!isSupabaseConfigured) {
     throw new Error(
-      'Supabase is not configured — set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Frontend/.env (see .env.example).',
+      'Supabase is not configured. VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY were empty when this bundle was built. Set them in Frontend/.env for local dev, or in your hosting platform build environment variables for deployments, then rebuild.',
     )
   }
 }

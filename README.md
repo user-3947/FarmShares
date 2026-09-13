@@ -5,7 +5,7 @@
 **The cooperative farm & share ledger — fractional agri-asset ownership,
 lease tracking and yield telemetry in one soft-UI portal.**
 
-[![Version](https://img.shields.io/badge/version-1.2.0-3d7d46?style=for-the-badge&labelColor=2a3323)](#-versioning)
+[![Version](https://img.shields.io/badge/version-1.2.1-3d7d46?style=for-the-badge&labelColor=2a3323)](#-versioning)
 [![React](https://img.shields.io/badge/React-19-149eca?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-8-aa6bff?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev)
@@ -121,6 +121,31 @@ npm run dev             # start the dev server
 > 💡 Without real credentials the app still builds and renders, but auth
 > actions fail fast with a pointer to `.env.example`.
 
+## ☁️ Deployment
+
+> ⚠️ **`VITE_*` variables are inlined at build time.** `.env` is git-ignored, so
+> a build performed by your hosting platform (CI) never sees it — the shipped
+> bundle renders, but auth fails at runtime with *"Supabase is not configured"*.
+
+**Fix:** give the two variables to the **build environment**, then rebuild.
+
+1. In your hosting dashboard (Vercel / Netlify / Cloudflare Pages / GitHub Actions…),
+   add the **build environment variables**:
+
+   | Name | Value |
+   |---|---|
+   | `VITE_SUPABASE_URL` | your Supabase project URL |
+   | `VITE_SUPABASE_ANON_KEY` | your public **anon** key (never the service key) |
+
+2. Point the platform at the app: **root directory** `Frontend/`,
+   **build command** `npm run build`, **output directory** `dist`.
+3. **Rebuild / redeploy** — variables only apply to builds created *after* they were set.
+
+> 💡 The build now **fails loudly in the logs** if it is producing an
+> unconfigured bundle (`🌾 Supabase credentials are missing from this build`),
+> so CI mistakes are obvious. Alternatively, build locally with `.env` present
+> and upload `dist/` yourself.
+
 ## 🔐 Security Model
 
 - Sign-in / sign-up are **email + password only** — no separate username exists anywhere.
@@ -135,7 +160,7 @@ npm run dev             # start the dev server
 The version is single-sourced in [`package.json`](package.json) and
 [`src/config/app.ts`](src/config/app.ts) (`APP_VERSION`) and rendered in every
 page footer. Release history — what each **Major.Minor.Patch** delivered — is
-documented concisely in [`devLog.md`](devLog.md). Current release: **1.2.0**.
+documented concisely in [`devLog.md`](devLog.md). Current release: **1.2.1**.
 
 ---
 
