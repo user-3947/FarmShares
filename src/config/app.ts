@@ -9,7 +9,7 @@
  */
 
 /** Display version — keep in sync with package.json. */
-export const APP_VERSION = '1.3.0'
+export const APP_VERSION = '1.4.0'
 
 export const APP_NAME = 'FarmShares'
 
@@ -33,6 +33,8 @@ export const ROUTES = {
   createAccount: '/create',
   /** Legacy alias kept for the old in-app spelling of the sign-up screen. */
   createAccountAlias: '/create-account',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
   dashboard: '/dashboard',
   termsOfService: '/terms-of-service',
   privacyPolicy: '/privacy-policy',

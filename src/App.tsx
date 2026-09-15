@@ -17,6 +17,8 @@ import { fetchOwnProfile, signOutUser } from './lib/auth'
 import { supabase } from './lib/supabase'
 import LoginPage from './pages/LoginPage'
 import CreateAccount from './pages/CreateAccount'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import TermsOfService from './pages/TermsOfService'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 
@@ -27,6 +29,8 @@ const Dashboard = lazy(() => import('./pages/Dashboard'))
 const VIEW_PATHS: Record<View, string> = {
   login: ROUTES.login,
   'create-account': ROUTES.createAccount,
+  'forgot-password': ROUTES.forgotPassword,
+  'reset-password': ROUTES.resetPassword,
   dashboard: ROUTES.dashboard,
 }
 
@@ -109,7 +113,20 @@ function AppShell() {
         navigate('login')
         return
       }
+      if (event === 'PASSWORD_RECOVERY') {
+        // The emailed link created a single-purpose recovery session — send
+        // the user to the new-password form instead of the dashboard.
+        setProfile(null)
+        navigate('reset-password')
+        return
+      }
       if (event === 'INITIAL_SESSION') {
+        // Never hijack a recovery flow into the dashboard: on /reset-password
+        // the session restore is handled by the reset screen itself.
+        if (window.location.pathname === ROUTES.resetPassword) {
+          setBooting(false)
+          return
+        }
         if (!session) {
           setBooting(false)
           return
@@ -146,6 +163,8 @@ function AppShell() {
         <Route element={<CreateAccount />} path={ROUTES.createAccountAlias} />
         <Route element={<TermsOfService />} path={ROUTES.termsOfService} />
         <Route element={<PrivacyPolicy />} path={ROUTES.privacyPolicy} />
+        <Route element={<ForgotPassword />} path={ROUTES.forgotPassword} />
+        <Route element={<ResetPassword />} path={ROUTES.resetPassword} />
         <Route
           element={
             <RequireProfile booting={booting}>

@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from './supabase'
 import type { Profile, Role } from '../context/AppContext'
+import { ROUTES } from '../config/app'
 
 const guard = () => {
   if (!isSupabaseConfigured) {
@@ -84,4 +85,28 @@ export async function signInUser(input: { email: string; password: string; selec
 
 export async function signOutUser() {
   await supabase.auth.signOut()
+}
+
+/**
+ * Emails the Supabase recovery link for `email`. The link redirects back to
+ * /reset-password, where supabase-js (detectSessionInUrl) exchanges the token
+ * for a single-purpose recovery session. NOTE: the redirect URL must be
+ * allow-listed in the Supabase dashboard (Authentication → URL Configuration).
+ */
+export async function requestPasswordReset(email: string): Promise<void> {
+  guard()
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}${ROUTES.resetPassword}`,
+  })
+  if (error) throw new Error(error.message)
+}
+
+/**
+ * Swaps the password of the current session — in the recovery flow this is
+ * the special single-purpose session created by the emailed link.
+ */
+export async function updateUserPassword(password: string): Promise<void> {
+  guard()
+  const { error } = await supabase.auth.updateUser({ password })
+  if (error) throw new Error(error.message)
 }

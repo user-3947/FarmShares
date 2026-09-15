@@ -31,7 +31,7 @@ export function NotificationsMenu() {
       </button>
 
       {open && (
-        <div className="neu-outset absolute right-0 top-12 z-50 w-80 rounded-2xl bg-surface p-4">
+        <div className="neu-outset absolute right-0 top-12 z-50 w-80 max-w-[calc(100vw-2rem)] rounded-2xl bg-surface p-4">
           <div className="mb-3 flex items-center justify-between">
             <h4 className="text-title-md font-bold text-on-surface">Notifications</h4>
             <button

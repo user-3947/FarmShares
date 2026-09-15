@@ -16,16 +16,16 @@ interface BrandLogoProps {
 
 export function BrandLogo({ tagline }: BrandLogoProps) {
   return (
-    <div className="flex items-center gap-3">
-      <div className="neu-outset flex h-10 w-10 items-center justify-center rounded-xl text-primary">
+    <div className="flex min-w-0 items-center gap-3">
+      <div className="neu-outset flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-primary">
         <Leaf className="h-5 w-5" strokeWidth={2.25} />
       </div>
       {tagline ? (
-        <div>
+        <div className="min-w-0">
           <span className="block text-headline-sm font-headline-sm tracking-tight text-primary">
             {APP_NAME}
           </span>
-          <span className="text-label-sm font-label-sm tracking-wide text-on-surface-variant uppercase">
+          <span className="block truncate text-label-sm font-label-sm tracking-wide text-on-surface-variant uppercase">
             {tagline}
           </span>
         </div>

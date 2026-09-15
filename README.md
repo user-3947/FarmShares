@@ -5,7 +5,7 @@
 **The cooperative farm & share ledger — fractional agri-asset ownership,
 lease tracking and yield telemetry in one soft-UI portal.**
 
-[![Version](https://img.shields.io/badge/version-1.3.0-3d7d46?style=for-the-badge&labelColor=2a3323)](#-versioning)
+[![Version](https://img.shields.io/badge/version-1.4.0-3d7d46?style=for-the-badge&labelColor=2a3323)](#-versioning)
 [![React](https://img.shields.io/badge/React-19-149eca?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-8-aa6bff?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev)
@@ -32,6 +32,8 @@ seasonal yield — all behind one Supabase-secured sign-in with a neumorphic
 | | Feature | Details |
 |---|---|---|
 | 🔐 | **Supabase Auth** | Email + password sign-in & sign-up, session restore on reload, clear errors for unconfirmed emails and role mismatches. |
+| 🔑 | **Password reset** | "Forgot?" → Supabase recovery email → `/reset-password` form (single-purpose session); expired/used links get a clear dead-link state. |
+| 📱 | **Responsive dashboard** | The sidebar becomes a slide-in drawer below `lg`, the search gets its own row below `md`, and cards/paddings adapt across desktop, tablet and mobile. |
 | 🧭 | **Real routes** | True browser URLs — `/login`, `/create`, `/dashboard` and legal pages — with a protected dashboard and a catch-all redirect to sign-in. |
 | 🛡️ | **Trusted roles** | Authorization comes from the signed-in user's own `public.profiles.role` row (RLS-backed). The UI role pick is verified, never trusted. |
 | 📊 | **Investor deck** | KPI tiles (capital, portfolio value, parcels, dividends) + a Recharts capital-vs-dividends ledger with 1M / 6M / 1Y horizons and one-click CSV export. |
@@ -91,6 +93,8 @@ src/
 ├── pages/                 # Slim composition roots
 │   ├── LoginPage.tsx
 │   ├── CreateAccount.tsx
+│   ├── ForgotPassword.tsx
+│   ├── ResetPassword.tsx
 │   ├── Dashboard.tsx
 │   ├── TermsOfService.tsx
 │   └── PrivacyPolicy.tsx
@@ -138,8 +142,18 @@ npm run dev             # start the dev server
 | `/login` | Sign-in — also the catch-all for unknown URLs |
 | `/create` | Create account (alias `/create-account`) |
 | `/dashboard` | Authenticated portal — redirects to `/login` without a trusted profile |
+| `/forgot-password` | Request a password-reset email |
+| `/reset-password` | Set a new password (target of the recovery email) |
 | `/terms-of-service` | Terms of Service (placeholder legal page) |
 | `/privacy-policy` | Privacy Policy (placeholder legal page) |
+
+### 🔑 Password reset — required Supabase settings
+
+The flow uses Supabase's built-in recovery email, so **no database changes** are needed — but two dashboard settings are required:
+
+1. **Authentication → URL Configuration → Redirect URLs** — add `http://localhost:5173/reset-password` (dev) and `https://<your-production-domain>/reset-password`. Without them Supabase refuses the redirect and the emailed link dies on an error page.
+2. **Authentication → URL Configuration → Site URL** — set it to your production URL (fallback target of the email link).
+3. *(Production)* **Project Settings → Auth → SMTP** — the built-in mailer is rate-limited (~2 emails/hour); plug in a custom SMTP sender for reliable delivery. The "Reset Password" template works as-is (`{{ .ConfirmationURL }}`).
 
 ## ☁️ Deployment
 
@@ -180,7 +194,7 @@ npm run dev             # start the dev server
 The version is single-sourced in [`package.json`](package.json) and
 [`src/config/app.ts`](src/config/app.ts) (`APP_VERSION`) and rendered in every
 page footer. Release history — what each **Major.Minor.Patch** delivered — is
-documented concisely in [`devLog.md`](devLog.md). Current release: **1.3.0**.
+documented concisely in [`devLog.md`](devLog.md). Current release: **1.4.0**.
 
 ---
 

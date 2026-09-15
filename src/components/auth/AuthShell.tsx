@@ -31,8 +31,8 @@ export function AuthShell({ tagline, statusLabel, children, footer, mainClassNam
       {/* Top bar: brand identity + telemetry + theme switch */}
       <header className="mx-auto flex w-full max-w-max-width items-center justify-between px-4 py-2 sm:px-6">
         <BrandLogo tagline={tagline} />
-        <div className="flex items-center gap-2">
-          <LiveStatusBadge label={statusLabel} />
+        <div className="flex shrink-0 items-center gap-2">
+          <LiveStatusBadge className="hidden sm:flex" label={statusLabel} />
           <ThemeToggle />
         </div>
       </header>

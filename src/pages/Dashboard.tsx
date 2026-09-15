@@ -37,6 +37,8 @@ export default function Dashboard() {
   const [range, setRange] = useState<RangeKey>('1Y')
   const [activeNav, setActiveNav] = useState('overview')
   const [query, setQuery] = useState('')
+  // Below lg the sidebar lives in a drawer, opened from the header hamburger.
+  const [navOpen, setNavOpen] = useState(false)
 
   /* Derived values — data-driven, nothing hardcoded in the markup. */
   const stats = DECK_STATS[view]
@@ -69,19 +71,22 @@ export default function Dashboard() {
         activeNav={activeNav}
         initials={initials}
         query={query}
+        onMenuToggle={() => setNavOpen(true)}
         onNavChange={setActiveNav}
         onQueryChange={setQuery}
       />
 
-      <div className="flex pt-16">
+      <div className="flex pt-28 md:pt-16">
         <DashboardSidebar
           activeNav={activeNav}
-          view={view}
+          mobileOpen={navOpen}
+          onMobileClose={() => setNavOpen(false)}
           onNavChange={setActiveNav}
           onViewToggle={toggleView}
+          view={view}
         />
 
-        <main className="mx-auto w-full flex-1 space-y-space-24 p-6 lg:ml-64 lg:p-10">
+        <main className="mx-auto w-full flex-1 space-y-space-24 p-4 sm:p-6 lg:ml-64 lg:p-10">
           <DashboardHero view={view} onViewChange={setView} />
 
           <section className="space-y-space-24">

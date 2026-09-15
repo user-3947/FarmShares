@@ -9,13 +9,14 @@
  */
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { Database, LogIn, Mail, ShieldCheck } from 'lucide-react'
 import { PasswordField } from '../../../components/auth/PasswordField'
 import { RoleSelector } from '../../../components/auth/RoleSelector'
 import { TextField } from '../../../components/auth/TextField'
 import { FormAlert } from '../../../components/auth/FormAlert'
 import { useApp } from '../../../context/AppContext'
-import { APP_NAME, APP_SIGNIN_TAGLINE } from '../../../config/app'
+import { APP_NAME, APP_SIGNIN_TAGLINE, ROUTES } from '../../../config/app'
 import { useTransientMessage } from '../../../hooks/useTransientMessage'
 import { signInUser } from '../../../lib/auth'
 import { validateLoginFields } from '../../../lib/validation'
@@ -83,13 +84,9 @@ export function SignInForm() {
           toggleable
           value={password}
           labelTrailing={
-            <a
-              className="text-label-sm font-label-sm text-primary hover:underline"
-              href="#reset"
-              onClick={(event) => event.preventDefault()}
-            >
+            <Link className="text-label-sm font-label-sm text-primary hover:underline" to={ROUTES.forgotPassword}>
               Forgot?
-            </a>
+            </Link>
           }
           onChange={setPassword}
         />

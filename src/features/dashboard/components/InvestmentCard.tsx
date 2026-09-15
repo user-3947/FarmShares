@@ -17,15 +17,15 @@ export function InvestmentCard({ investment }: InvestmentCardProps) {
   const subscribed = Math.round((investment.allocated / investment.target) * 100)
   return (
     <div className="neu-inset space-y-3 rounded-2xl bg-surface p-4">
-      <div className="flex items-center justify-between">
-        <h4 className="text-label-lg font-bold text-on-surface">{investment.name}</h4>
-        <span className="neu-outset-sm rounded-full bg-surface px-2 py-0.5 text-label-sm font-bold text-success">
+      <div className="flex items-center justify-between gap-2">
+        <h4 className="min-w-0 truncate text-label-lg font-bold text-on-surface">{investment.name}</h4>
+        <span className="neu-outset-sm shrink-0 rounded-full bg-surface px-2 py-0.5 text-label-sm font-bold text-success">
           {investment.roi}
         </span>
       </div>
-      <div className="flex justify-between text-body-sm font-body-sm text-on-surface-variant">
-        <span>{investment.category}</span>
-        <span>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-body-sm font-body-sm text-on-surface-variant">
+        <span className="whitespace-nowrap">{investment.category}</span>
+        <span className="whitespace-nowrap">
           Allocated: ${investment.allocated.toFixed(2)}M / ${investment.target.toFixed(2)}M
         </span>
       </div>

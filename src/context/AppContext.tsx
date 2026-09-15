@@ -10,7 +10,8 @@
  */
 import { createContext, useContext } from 'react'
 
-export type View = 'login' | 'create-account' | 'dashboard'
+/** Screens the context-level `navigate` can jump to (legal pages use <Link>). */
+export type View = 'login' | 'create-account' | 'forgot-password' | 'reset-password' | 'dashboard'
 export type Theme = 'light' | 'dark'
 export type Role = 'Investor' | 'Landowner' | 'Employee'
 

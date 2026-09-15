@@ -22,7 +22,7 @@ interface HoldingsPanelProps {
 
 export function HoldingsPanel({ investments, query, openCalls }: HoldingsPanelProps) {
   return (
-    <div className="neu-outset flex flex-col justify-between rounded-3xl bg-surface p-8 lg:col-span-4">
+    <div className="neu-outset flex flex-col justify-between rounded-3xl bg-surface p-5 sm:p-8 lg:col-span-4">
       <div>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-title-md font-bold text-on-surface">Active Holdings</h3>

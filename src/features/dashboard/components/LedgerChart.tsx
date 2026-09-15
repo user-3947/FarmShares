@@ -57,7 +57,7 @@ function LedgerTooltip({ active, label, payload }: LedgerTooltipProps) {
 
 export function LedgerChart({ data, range, ranges, onRangeChange, palette, onExport }: LedgerChartProps) {
   return (
-    <div className="neu-outset flex flex-col justify-between rounded-3xl bg-surface p-8 lg:col-span-8">
+    <div className="neu-outset flex flex-col justify-between rounded-3xl bg-surface p-5 sm:p-8 lg:col-span-8">
       {/* Card header: title + horizon switcher */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -137,7 +137,7 @@ export function LedgerChart({ data, range, ranges, onRangeChange, palette, onExp
 
       {/* Legend + export action */}
       <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6">
           <div className="flex items-center gap-2">
             <span className="h-3 w-3 rounded-full bg-primary" />
             <span className="text-body-sm font-body-sm text-on-surface">Capital Assets</span>
